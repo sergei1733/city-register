@@ -13,7 +13,8 @@ public class PersonCheckDao {
             "inner join cr_person p on p.person_id = ap.person_id" +
             "inner join cr_address a on a.address_id = ap.address_id" +
             "where" +
-            "upper(p.sur_name) = upper(?)  and" +
+            "CURRENT_DATE >= ap.start_date and (CURRENT_DATE <= ap.end_date or ap.end_date is null)"+
+            "and upper(p.sur_name) = upper(?)  and" +
             "upper(p.given_name) = upper(?) and" +
             "upper(patronymic) = upper(?)and" +
             "p.date_of_birth = ?" +
