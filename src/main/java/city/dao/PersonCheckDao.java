@@ -55,7 +55,7 @@ public class PersonCheckDao {
     private Connection getConnection() throws SQLException {
 
         return DriverManager.getConnection("jdbc:postgresql://localhost/city_register",
-                "postgres", "123");
+                "postgres1", "123");
     }
 
 

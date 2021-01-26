@@ -85,10 +85,20 @@ INSERT INTO cr_address_person (address_id, person_id, start_date, end_date, temp
 VALUES ('1','1','2014-10-12', NULL, false);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','1','2014-10-12', NULL);
+VALUES ('1','2','2014-10-12', NULL);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','1','2016-01-28', NULL);
+VALUES ('1','3','2016-01-28', NULL);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','1','2018-10-12', NULL);
+VALUES ('1','4','2018-10-12', NULL);
+
+
+
+
+SELECT * from cr_address_person ap
+inner join cr_person p on p.person_id = ap.person_id
+inner join cr_address a on a.address_id = ap.address_id
+where
+p.sur_name = 'Васильев'  and p.given_name = 'Павел' and patronymic = 'Николаевич'
+and a.street_code = 1 and a.building = '10' and extension ='2' and a.apartment ='121'
