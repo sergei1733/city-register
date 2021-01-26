@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PersonCheckDao {
+
     private final String SQL_REQUEST = "";
+
     public PersonResponse checkPerson (PersonRequest request) throws PersonCheckException {
         PersonResponse response = new PersonResponse();
         try (Connection con = getConnection();
