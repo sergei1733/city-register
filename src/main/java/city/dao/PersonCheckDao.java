@@ -4,10 +4,7 @@ import city.domain.PersonRequest;
 import city.domain.PersonResponse;
 import city.exception.PersonCheckException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class PersonCheckDao {
 
@@ -31,6 +28,15 @@ public class PersonCheckDao {
              PreparedStatement stmt = con.prepareStatement(SQL_REQUEST)){
 
             stmt.setString(1,request.getSurName());
+            stmt.setString(2,request.getGivenName());
+            stmt.setString(3,request.getPatronymic());
+            stmt.setDate(4,java.sql.Date.valueOf(request.getDateOfBirth()));
+            stmt.setInt(5, request.getStreetCode());
+            stmt.setString(6, request.getBuilding());
+            stmt.setString(7, request.getExtension());
+            stmt.setString(8, request.getApartment());
+
+
 
 
             ResultSet rs = stmt.executeQuery();
@@ -46,9 +52,10 @@ public class PersonCheckDao {
 
     }
 
-    private Connection getConnection() {
+    private Connection getConnection() throws SQLException {
 
-        return null;
+        return DriverManager.getConnection("jdbc:postgresql://localhost/city_register",
+                "postgres", "123");
     }
 
 
