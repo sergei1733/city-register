@@ -1,121 +1,64 @@
-DROP TABLE IF EXISTS jc_student_child;
-DROP TABLE IF EXISTS jc_student_order;
-DROP TABLE IF EXISTS jc_passport_office;
-DROP TABLE IF EXISTS jc_register_office;
-DROP TABLE IF EXISTS jc_country_struct;
-DROP TABLE IF EXISTS jc_university;
-DROP TABLE IF EXISTS jc_street;
+DROP TABLE IF EXISTS ts_apartment_resident;
+DROP TABLE IF EXISTS ts_apartment;
+DROP TABLE IF EXISTS ts_house;
+DROP TABLE IF EXISTS ts_pets;
+DROP TABLE IF EXISTS ts_social_status;
 
-CREATE TABLE jc_street
+CREATE TABLE ts_house
 (
-    street_code integer not null,
-    street_name varchar(300),
-    PRIMARY KEY (street_code)
+    house_id SERIAL;
+    house_code integer not null,
+    address_name varchar(300),
+    PRIMARY KEY (house_id)
 );
 
-CREATE TABLE jc_university
+CREATE TABLE ts_apartment
 (
-    university_id integer not null,
-    university_name varchar(300),
-    PRIMARY KEY (university_id)
+    ap_apartment_id SERIAL,
+    ap_house_id integer not null,
+    ap_address_name varchar(300),
+    ap_apartment_owner varchar(100),
+    ap_apartment_number varchar(10),
+    ap_entrance_number varchar(3),
+    ap_house_code integer not null,
+    PRIMARY KEY (ap_apartment_id),
+    FOREIGN KEY (ap_house_id) REFERENCES ts_house(house_id) ON DELETE RESTRICT
 );
 
-CREATE TABLE jc_country_struct
+CREATE TABLE ts_pets
 (
-    area_id char(12) not null,
-    area_name varchar(200),
-    PRIMARY KEY (area_id)
+    ps_pet_id SERIAL,
+    apartment_resident_id integer not null,
+    ps_area_name varchar(200),
+    ps_pet_name varchar(50),
+    ps_pet_address varchar (100),
+    PRIMARY KEY (ps_pet_id)
+    FOREIGN KEY (apartment_resident_id) REFERENCES ts_apartment_resident(ar_apartment_resident_id) ON DELETE RESTRICT
 );
 
-CREATE TABLE jc_passport_office
+CREATE TABLE ts_social_status
 (
-    p_office_id integer not null,
-    p_office_area_id char(12) not null,
-    p_office_name varchar(200),
-    PRIMARY KEY (p_office_id),
-    FOREIGN KEY (p_office_area_id) REFERENCES jc_country_struct(area_id) ON DELETE RESTRICT
+    ss_social_status_id SERIAL,
+    ss_social_status_name char(50) not null,
+    PRIMARY KEY (ss_social_status_id),
 );
 
-CREATE TABLE jc_register_office
+CREATE TABLE ts_apartment_resident
 (
-    r_office_id integer not null,
-    r_office_area_id char(12) not null,
-    r_office_name varchar(200),
-    PRIMARY KEY (r_office_id),
-    FOREIGN KEY (r_office_area_id) REFERENCES jc_country_struct(area_id) ON DELETE RESTRICT
+    ar_apartment_resident_id SERIAL,
+    apartment_id integer not null,
+    social_status_id integer not null,
+    ar_sur_name varchar(100) not null,
+    ar_given_name varchar(100) not null,
+    ar_patronymic varchar(100) not null,
+    ar_address varchar(300),
+    ar_social_status_id integer not null,
+    ar_pet_id integer not null;
+    ar_apartment_id integer not null,
+
+    PRIMARY KEY (ar_apartment_resident_id),
+    FOREIGN KEY (apartment_id) REFERENCES ts_apartment(ap_apartment_id) ON DELETE RESTRICT,
+    FOREIGN KEY (social_status_id) REFERENCES ts_social_status(ss_social_status_id) ON DELETE RESTRICT
 );
 
-
-CREATE TABLE jc_student_order
-(
-    student_order_id SERIAL,
-    student_order_status int not null,
-    student_order_date timestamp not null,
-    h_sur_name varchar(100) not null,
-    h_given_name varchar(100) not null,
-    h_patronymic varchar(100) not null,
-    h_date_of_birth date not null,
-    h_passport_seria varchar(10) not null,
-    h_passport_number varchar(10) not null,
-    h_passport_date date not null,
-    h_passport_office_id integer not null,
-    h_post_index varchar(10),
-    h_street_code integer not null,
-    h_building varchar(10) not null,
-    h_extension varchar(10),
-    h_apartment varchar(10),
-    h_university_id integer not null,
-    h_student_number varchar(30) not null,
-    w_sur_name varchar(100) not null,
-    w_given_name varchar(100) not null,
-    w_patronymic varchar(100) not null,
-    w_date_of_birth date not null,
-    w_passport_seria varchar(10) not null,
-    w_passport_number varchar(10) not null,
-    w_passport_date date not null,
-    w_passport_office_id integer not null,
-    w_post_index varchar(10),
-    w_street_code integer not null,
-    w_building varchar(10) not null,
-    w_extension varchar(10),
-    w_apartment varchar(10),
-    w_university_id integer not null,
-    w_student_number varchar(30) not null,
-    certificate_id varchar(20) not null,
-    register_office_id integer not null,
-    marriage_date date not null,
-    PRIMARY KEY (student_order_id),
-    FOREIGN KEY (h_street_code) REFERENCES jc_street(street_code) ON DELETE RESTRICT,
-    FOREIGN KEY (h_passport_office_id) REFERENCES jc_passport_office(p_office_id) ON DELETE RESTRICT,
-    FOREIGN KEY (h_university_id) REFERENCES jc_university(university_id) ON DELETE RESTRICT,
-    FOREIGN KEY (w_street_code) REFERENCES jc_street(street_code) ON DELETE RESTRICT,
-    FOREIGN KEY (w_passport_office_id) REFERENCES jc_passport_office(p_office_id) ON DELETE RESTRICT,
-    FOREIGN KEY (w_university_id) REFERENCES jc_university(university_id) ON DELETE RESTRICT,
-    FOREIGN KEY (register_office_id) REFERENCES jc_register_office(r_office_id) ON DELETE RESTRICT
-);
-
-CREATE TABLE jc_student_child
-(
-    student_child_id SERIAL,
-    student_order_id integer not null,
-    c_sur_name varchar(100) not null,
-    c_given_name varchar(100) not null,
-    c_patronymic varchar(100) not null,
-    c_date_of_birth date not null,
-    c_certificate_number varchar(10) not null,
-    c_certificate_date date not null,
-    c_register_office_id integer not null,
-    c_post_index varchar(10),
-    c_street_code integer not null,
-    c_building varchar(10) not null,
-    c_extension varchar(10),
-    c_apartment varchar(10),
-    PRIMARY KEY (student_child_id),
-    FOREIGN KEY (student_order_id) REFERENCES jc_student_order(student_order_id) ON DELETE RESTRICT,
-    FOREIGN KEY (c_street_code) REFERENCES jc_street(street_code) ON DELETE RESTRICT,
-    FOREIGN KEY (c_register_office_id) REFERENCES jc_register_office(r_office_id) ON DELETE RESTRICT
-);
-
-CREATE INDEX idx_student_order_status ON jc_student_order(student_order_status);
-
-CREATE INDEX idx_student_order_id ON jc_student_child(student_order_id);
+CREATE INDEX idx_ar_apartment_resident_id ON ts_apartment_resident(ar_apartment_resident_id);
