@@ -12,6 +12,6 @@ public class CheckPersonServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("Get CheckPerson - called");
+
     }
 }
