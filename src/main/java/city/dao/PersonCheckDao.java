@@ -27,6 +27,10 @@ public class PersonCheckDao {
         this.connectionBuilder = connectionBuilder;
     }
 
+    private Connection getConnection() throws SQLException {
+        return connectionBuilder.getConnection();
+    }
+
     public PersonResponse checkPerson (PersonRequest request) throws PersonCheckException {
         PersonResponse response = new PersonResponse();
         String sql = SQL_REQUEST;
@@ -58,8 +62,6 @@ public class PersonCheckDao {
                 stmt.setString(count++, request.getApartment());
             }
 
-
-
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 response.setRegistered(true);
@@ -67,16 +69,11 @@ public class PersonCheckDao {
             }
 
         }catch (SQLException ex){
-            //throw new PersonCheckException(ex);
-            ex.printStackTrace();
+            throw new PersonCheckException(ex);
+            //ex.printStackTrace();
         }
         return response;
 
     }
-
-    private Connection getConnection() throws SQLException {
-        return connectionBuilder.getConnection();
-    }
-
 
 }
