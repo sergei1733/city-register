@@ -20,12 +20,11 @@ public class PersonCheckDao {
             "p.date_of_birth = ? " +
             "and a.street_code = ? and " +
             "upper(a.building) = upper(?)  ";
-    public PersonCheckDao() {
-        try{
-            Class.forName("org.postgresql.Driver");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
+    private ConnectionBuilder connectionBuilder;
+
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
     public PersonResponse checkPerson (PersonRequest request) throws PersonCheckException {
@@ -76,9 +75,7 @@ public class PersonCheckDao {
     }
 
     private Connection getConnection() throws SQLException {
-
-        return DriverManager.getConnection("jdbc:postgresql://localhost/city_register",
-                "postgres1", "123");
+        return connectionBuilder.getConnection();
     }
 
 
