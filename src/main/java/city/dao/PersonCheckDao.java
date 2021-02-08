@@ -5,6 +5,7 @@ import city.domain.PersonResponse;
 import city.exception.PersonCheckException;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class PersonCheckDao {
 
@@ -27,7 +28,7 @@ public class PersonCheckDao {
         this.connectionBuilder = connectionBuilder;
     }
 
-    private Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         return connectionBuilder.getConnection();
     }
 
@@ -46,31 +47,29 @@ public class PersonCheckDao {
         }
 
         try (Connection con = getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)){
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
             int count = 1;
-            stmt.setString(count++,request.getSurName());
-            stmt.setString(count++,request.getGivenName());
-            stmt.setString(count++,request.getPatronymic());
-            stmt.setDate(count++,java.sql.Date.valueOf(request.getDateOfBirth()));
+            stmt.setString(count++, request.getSurName());
+            stmt.setString(count++, request.getGivenName());
+            stmt.setString(count++, request.getPatronymic());
+            stmt.setDate(count++, java.sql.Date.valueOf(request.getDateOfBirth()));
             stmt.setInt(count++, request.getStreetCode());
             stmt.setString(count++, request.getBuilding());
             if (request.getExtension() != null) {
                 stmt.setString(count++, request.getExtension());
             }
-            if (request.getApartment() !=null) {
+            if (request.getApartment() != null) {
                 stmt.setString(count++, request.getApartment());
             }
 
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 response.setRegistered(true);
                 response.setTemporal(rs.getBoolean("temporal"));
             }
-
-        }catch (SQLException ex){
+        } catch(SQLException ex) {
             throw new PersonCheckException(ex);
-            //ex.printStackTrace();
         }
         return response;
 
