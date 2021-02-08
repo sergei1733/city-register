@@ -8,6 +8,7 @@ import city.exception.PersonCheckException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,21 +18,22 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet(name = "CheckPersonServlet", urlPatterns = {"/checkPerson"})
-public class CheckPersonServlet extends HttpServlet {
-
+public class CheckPersonServlet extends HttpServlet
+{
     private static final Logger logger = LoggerFactory.getLogger(CheckPersonServlet.class);
 
     private PersonCheckDao dao;
 
+
     @Override
-    public void init() {
+    public void init() throws ServletException {
         logger.info("SERVLET is created");
         dao = new PersonCheckDao();
         dao.setConnectionBuilder(new PoolConnectionBuilder());
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
         PersonRequest pr = new PersonRequest();
@@ -45,18 +47,15 @@ public class CheckPersonServlet extends HttpServlet {
         pr.setExtension(req.getParameter("extension"));
         pr.setApartment(req.getParameter("apartment"));
 
-
         try {
             PersonResponse ps = dao.checkPerson(pr);
-            if (ps.isRegistered()){
+            if (ps.isRegistered()) {
                 resp.getWriter().write("Registered");
-            }else{
+            } else {
                 resp.getWriter().write("Not registered");
             }
-        } catch (PersonCheckException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-
     }
 }
