@@ -4,14 +4,16 @@ DROP TABLE IF EXISTS cr_address;
 DROP TABLE IF EXISTS cr_street;
 DROP TABLE IF EXISTS cr_district;
 
-CREATE TABLE cr_district
-(
+
+CREATE TABLE cr_district (
     district_code integer not null,
     district_name varchar(300),
     PRIMARY KEY (district_code)
 );
+
 INSERT INTO cr_district (district_code, district_name)
-VALUES (1,'Вверхний');
+VALUES (1, 'Выборгский');
+
 
 CREATE TABLE cr_street
 (
@@ -21,9 +23,10 @@ CREATE TABLE cr_street
 );
 
 INSERT INTO cr_street (street_code, street_name)
-VALUES(1,'Свободный проспект');
+VALUES (1, 'Сампсоньевский проспект');
 
-CREATE TABLE cr_address(
+
+CREATE TABLE cr_address (
     address_id SERIAL,
     district_code integer not null,
     street_code integer not null,
@@ -35,11 +38,13 @@ CREATE TABLE cr_address(
     FOREIGN KEY (street_code) REFERENCES cr_street(street_code) ON DELETE RESTRICT
 );
 
-INSERT INTO cr_address(district_code, street_code, building, extension, apartment)
-VALUES (1,1,'10','2','121');
+INSERT INTO cr_address (district_code, street_code, building, extension, apartment)
+VALUES (1, 1, '10', '2', '121');
+INSERT INTO cr_address (district_code, street_code, building, extension, apartment)
+VALUES (1, 1, '271', null, '4');
 
-CREATE TABLE  cr_person
-(
+
+CREATE TABLE cr_person (
     person_id SERIAL,
     sur_name varchar(100) not null,
     given_name varchar(100) not null,
@@ -55,22 +60,24 @@ CREATE TABLE  cr_person
 
 INSERT INTO cr_person (sur_name, given_name, patronymic, date_of_birth,
 passport_seria, passport_number, passport_date, certificate_number, certificate_date)
-VALUES ('Васильев','Павел','Николаевич','1995-03-04','1235','123456','2015-04-15',null,null);
+VALUES ('Васильев', 'Павел', 'Николаевич', '1995-03-18', '1234', '123456', '2015-04-11',
+null, null);
 
 INSERT INTO cr_person (sur_name, given_name, patronymic, date_of_birth,
 passport_seria, passport_number, passport_date, certificate_number, certificate_date)
-VALUES ('Васильева','Ирина','Петровна','1997-04-20','3214','654123','2016-03-17',null,null);
+VALUES ('Васильева', 'Ирина', 'Петровна', '1997-08-21', '4321', '654321', '2017-09-19',
+null, null);
 
 INSERT INTO cr_person (sur_name, given_name, patronymic, date_of_birth,
 passport_seria, passport_number, passport_date, certificate_number, certificate_date)
-VALUES ('Васильева','Мария','Павловна','2016-01-20',null,null,null,'587421','2016-03-17');
+VALUES ('Васильева', 'Евгения', 'Павловна', '2016-01-11', null, null, null, '456123', '2016-01-21');
 
 INSERT INTO cr_person (sur_name, given_name, patronymic, date_of_birth,
 passport_seria, passport_number, passport_date, certificate_number, certificate_date)
-VALUES ('Васильев','Сергей','Павлович','2018-08-21',null,null,null,'568974','2018-10-17');
+VALUES ('Васильев', 'Александр', 'Павлович', '2018-10-24', null, null, null, '321654', '2018-11-09');
 
-CREATE TABLE cr_address_person
-(
+
+CREATE TABLE cr_address_person (
     person_address_id SERIAL,
     address_id integer not null,
     person_id integer not null,
@@ -81,24 +88,15 @@ CREATE TABLE cr_address_person
     FOREIGN KEY (address_id) REFERENCES cr_address(address_id) ON DELETE RESTRICT,
     FOREIGN KEY (person_id) REFERENCES cr_person(person_id) ON DELETE RESTRICT
 );
+
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date, temporal)
-VALUES ('1','1','2014-10-12', NULL, false);
+VALUES (1, 1, '2014-10-12', null, false);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','2','2014-10-12', NULL);
+VALUES (1, 2, '2014-10-12', null);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','3','2016-01-28', NULL);
+VALUES (1, 3, '2016-02-05', null);
 
 INSERT INTO cr_address_person (address_id, person_id, start_date, end_date)
-VALUES ('1','4','2018-10-12', NULL);
-
-
-
-
-SELECT * from cr_address_person ap
-inner join cr_person p on p.person_id = ap.person_id
-inner join cr_address a on a.address_id = ap.address_id
-where
-p.sur_name = 'Васильев'  and p.given_name = 'Павел' and patronymic = 'Николаевич'
-and a.street_code = 1 and a.building = '10' and extension ='2' and a.apartment ='121'
+VALUES (1, 4, '2018-12-11', null);

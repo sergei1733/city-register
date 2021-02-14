@@ -33,12 +33,12 @@ public class CheckPersonServlet extends HttpServlet
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
         PersonRequest pr = new PersonRequest();
-        pr.setSurName(req.getParameter("surname"));
-        pr.setGivenName(req.getParameter("givenname"));
+        pr.setSurName(req.getParameter("surName"));
+        pr.setGivenName(req.getParameter("givenName"));
         pr.setPatronymic(req.getParameter("patronymic"));
         LocalDate dateOfBirth = LocalDate.parse(req.getParameter("dateOfBirth"), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         pr.setDateOfBirth(dateOfBirth);
@@ -57,5 +57,6 @@ public class CheckPersonServlet extends HttpServlet
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
     }
 }
