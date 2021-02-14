@@ -40,7 +40,7 @@ public class PersonRequest {
     }
 
     public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+        return dateOfBirth=LocalDate.of(1995,3,18);//Убрать
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {

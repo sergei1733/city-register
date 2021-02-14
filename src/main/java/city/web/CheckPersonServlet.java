@@ -41,7 +41,7 @@ public class CheckPersonServlet extends HttpServlet
         pr.setGivenName(req.getParameter("givenName"));
         pr.setPatronymic(req.getParameter("patronymic"));
         LocalDate dateOfBirth = LocalDate.parse(req.getParameter("dateOfBirth"), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        pr.setDateOfBirth(dateOfBirth);
+        pr.setDateOfBirth(dateOfBirth); //Убрать
         pr.setStreetCode(Integer.parseInt(req.getParameter("streetCode")));
         pr.setBuilding(req.getParameter("building"));
         pr.setExtension(req.getParameter("extension"));

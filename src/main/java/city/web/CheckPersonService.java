@@ -40,6 +40,6 @@ public class CheckPersonService {
        // System.out.println(request.toString());
         logger.info(request.toString());
         return dao.checkPerson(request);
-       // return new PersonResponse();
+        //return new PersonResponse();
     }
 }
